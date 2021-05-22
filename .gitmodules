@@ -1,3 +1,6 @@
 [submodule "default-theme"]
 	path = src/main/resources/templates/themes/anatole
 	url = https://github.com/tanliyuan/halo-theme-anatole
+[submodule "src/main/resources/templates/themes/weicarus"]
+	path = src/main/resources/templates/themes/weicarus
+	url = https://github.com/tanliyuan/weicarus

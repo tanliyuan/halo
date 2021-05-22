@@ -1,6 +1,6 @@
 FROM adoptopenjdk:11-jre-hotspot as builder
 WORKDIR application
-ARG JAR_FILE=build/libs/*.jar
+ARG JAR_FILE=build/libs/halo-1.4.8.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 

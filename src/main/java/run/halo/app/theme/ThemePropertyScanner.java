@@ -1,23 +1,28 @@
 package run.halo.app.theme;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+import run.halo.app.handler.theme.config.ThemePropertyResolver;
+import run.halo.app.handler.theme.config.impl.YamlThemePropertyResolver;
+import run.halo.app.handler.theme.config.support.ThemeProperty;
+import run.halo.app.utils.FunctionUtil;
+
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
-import run.halo.app.handler.theme.config.ThemePropertyResolver;
-import run.halo.app.handler.theme.config.impl.YamlThemePropertyResolver;
-import run.halo.app.handler.theme.config.support.ThemeProperty;
 
 /**
  * Theme property scanner.
@@ -33,7 +38,7 @@ public enum ThemePropertyScanner {
 
     /**
      * Scan theme properties.
-     *
+     *  类路径下的同名主题优先级高于 工作目录下同名主题
      * @param themePath them path must not be null
      * @return a list of them property
      */
@@ -53,12 +58,17 @@ public enum ThemePropertyScanner {
             List<Path> themePaths = pathStream.filter(Files::isDirectory)
                 .collect(Collectors.toList());
 
-            if (CollectionUtils.isEmpty(themePaths)) {
+            List<Path> classPathThemes = getClassPathThemes();
+            //类路径的优先
+            List<Path> homeAndClasspathThemes = ListUtils.union(classPathThemes, themePaths);
+            List<Path> allThemes = homeAndClasspathThemes.stream().filter(FunctionUtil.distinctByKey(Path::getFileName)).collect(Collectors.toList());
+
+            if (CollectionUtils.isEmpty(allThemes)) {
                 return Collections.emptyList();
             }
 
             // Get theme properties
-            ThemeProperty[] properties = themePaths.stream()
+            ThemeProperty[] properties = allThemes.stream()
                 .map(this::fetchThemeProperty)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -72,6 +82,23 @@ public enum ThemePropertyScanner {
             return Arrays.asList(properties);
         } catch (IOException e) {
             log.error("Failed to get themes", e);
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * 获取类路径下的主题
+     * @return
+     */
+    public List<Path> getClassPathThemes() {
+        try {
+            Path themesDir = Paths.get(this.getClass().getClassLoader().getResource("templates/themes").toURI());
+
+            List<Path> themePaths = Files.list(themesDir).filter(Files::isDirectory)
+                    .collect(Collectors.toList());
+            return themePaths;
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
             return Collections.emptyList();
         }
     }

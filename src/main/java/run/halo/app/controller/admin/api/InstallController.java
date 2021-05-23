@@ -1,12 +1,6 @@
 package run.halo.app.controller.admin.api;
 
-import cn.hutool.crypto.SecureUtil;
 import io.swagger.annotations.ApiOperation;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,11 +18,7 @@ import run.halo.app.model.entity.PostComment;
 import run.halo.app.model.entity.User;
 import run.halo.app.model.enums.LogType;
 import run.halo.app.model.enums.PostStatus;
-import run.halo.app.model.params.CategoryParam;
-import run.halo.app.model.params.InstallParam;
-import run.halo.app.model.params.MenuParam;
-import run.halo.app.model.params.PostParam;
-import run.halo.app.model.params.SheetParam;
+import run.halo.app.model.params.*;
 import run.halo.app.model.properties.BlogProperties;
 import run.halo.app.model.properties.OtherProperties;
 import run.halo.app.model.properties.PrimaryProperties;
@@ -36,14 +26,11 @@ import run.halo.app.model.properties.PropertyEnum;
 import run.halo.app.model.support.BaseResponse;
 import run.halo.app.model.support.CreateCheck;
 import run.halo.app.model.vo.PostDetailVO;
-import run.halo.app.service.CategoryService;
-import run.halo.app.service.MenuService;
-import run.halo.app.service.OptionService;
-import run.halo.app.service.PostCommentService;
-import run.halo.app.service.PostService;
-import run.halo.app.service.SheetService;
-import run.halo.app.service.UserService;
+import run.halo.app.service.*;
+import run.halo.app.utils.AvatarGeneratorUtil;
 import run.halo.app.utils.ValidationUtils;
+
+import java.util.*;
 
 /**
  * Installation controller.
@@ -278,9 +265,7 @@ public class InstallController {
             // Update user
             return userService.update(user);
         }).orElseGet(() -> {
-            String gravatar =
-                "//cn.gravatar.com/avatar/" + SecureUtil.md5(installParam.getEmail())
-                    + "?s=256&d=mm";
+            String gravatar = AvatarGeneratorUtil.generateAvatar(installParam.getNickname());
             installParam.setAvatar(gravatar);
             return userService.createBy(installParam);
         });

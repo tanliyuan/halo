@@ -1,21 +1,6 @@
 package run.halo.app.service.impl;
 
-import static org.springframework.data.domain.Sort.Direction.DESC;
-
 import cn.hutool.core.util.URLUtil;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.persistence.criteria.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -57,6 +42,12 @@ import run.halo.app.service.base.BaseCommentService;
 import run.halo.app.utils.ServiceUtils;
 import run.halo.app.utils.ServletUtils;
 import run.halo.app.utils.ValidationUtils;
+
+import javax.persistence.criteria.Predicate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 /**
  * Base comment service implementation.
@@ -770,6 +761,6 @@ public abstract class BaseCommentServiceImpl<COMMENT extends BaseComment>
         final String gravatarDefault =
             optionService.getByPropertyOrDefault(CommentProperties.GRAVATAR_DEFAULT, String.class);
 
-        return gravatarSource + gravatarMd5 + "?d=" + gravatarDefault;
+        return "https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + gravatarMd5;
     }
 }

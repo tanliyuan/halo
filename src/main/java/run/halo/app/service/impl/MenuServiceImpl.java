@@ -1,11 +1,5 @@
 package run.halo.app.service.impl;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -20,6 +14,9 @@ import run.halo.app.repository.MenuRepository;
 import run.halo.app.service.MenuService;
 import run.halo.app.service.base.AbstractCrudService;
 import run.halo.app.utils.ServiceUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * MenuService implementation class.
@@ -79,7 +76,9 @@ public class MenuServiceImpl extends AbstractCrudService<Menu, Integer> implemen
     @Override
     public List<MenuDTO> listByTeam(@NonNull String team, Sort sort) {
         List<Menu> menus = menuRepository.findByTeam(team, sort);
-        return menus.stream().map(menu -> (MenuDTO) new MenuDTO().convertFrom(menu))
+        return menus.stream()
+                .filter(menu -> Objects.equals(menu.getVisiable(), 1))
+                .map(menu -> (MenuDTO) new MenuDTO().convertFrom(menu))
             .collect(Collectors.toList());
     }
 

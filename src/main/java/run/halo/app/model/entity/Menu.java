@@ -1,17 +1,12 @@
 package run.halo.app.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 /**
  * Menu entity
@@ -78,6 +73,12 @@ public class Menu extends BaseEntity {
      */
     @Column(name = "team")
     private String team;
+
+    /**
+     * 是否可见, 1:可见，0：不可见
+     */
+    @Column(name = "visiable", columnDefinition = "int default 1")
+    private Integer visiable;
 
     @Override
     public void prePersist() {

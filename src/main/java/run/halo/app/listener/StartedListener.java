@@ -120,7 +120,7 @@ public class StartedListener implements ApplicationListener<ApplicationStartedEv
             .dataSource(url, username, password)
             .load();
         flyway.repair();
-        flyway.migrate();
+        // flyway.migrate();
 
         // Gets database connection
         Connection connection = flyway.getConfiguration().getDataSource().getConnection();

@@ -46,6 +46,12 @@ spring:
       max-request-size: 10240MB
   cache:
     type: none
+  freemarker:
+    cache: false
+    prefer-file-system-access: true
+    template-loader-path:
+      - file:///${user.dir}/src/main/resources/templates
+      - file:///${halo.work-dir}/templates/
 management:
   endpoints:
     web:

@@ -761,6 +761,6 @@ public abstract class BaseCommentServiceImpl<COMMENT extends BaseComment>
         final String gravatarDefault =
             optionService.getByPropertyOrDefault(CommentProperties.GRAVATAR_DEFAULT, String.class);
 
-        return "https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + gravatarMd5;
+        return "https://ui-avatars.com/api/?background=ff6732&color=fff&name=" + gravatarMd5;
     }
 }

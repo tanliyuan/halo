@@ -33,4 +33,6 @@ public class MenuDTO implements OutputConverter<MenuDTO, Menu> {
     private Integer parentId;
 
     private String team;
+
+    private Integer visible;
 }

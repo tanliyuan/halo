@@ -77,7 +77,7 @@ public class MenuServiceImpl extends AbstractCrudService<Menu, Integer> implemen
     public List<MenuDTO> listByTeam(@NonNull String team, Sort sort) {
         List<Menu> menus = menuRepository.findByTeam(team, sort);
         return menus.stream()
-                .filter(menu -> Objects.equals(menu.getVisiable(), 1))
+                .filter(menu -> Objects.equals(menu.getVisible(), 1))
                 .map(menu -> (MenuDTO) new MenuDTO().convertFrom(menu))
             .collect(Collectors.toList());
     }

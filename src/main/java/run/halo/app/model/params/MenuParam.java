@@ -1,12 +1,13 @@
 package run.halo.app.model.params;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.ToString;
 import run.halo.app.model.dto.base.InputConverter;
 import run.halo.app.model.entity.Menu;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * Menu param.
@@ -42,4 +43,6 @@ public class MenuParam implements InputConverter<Menu> {
 
     @Size(max = 255, message = "菜单分组的字符长度不能超过 {max}")
     private String team;
+
+    private Integer visible;
 }

@@ -78,7 +78,7 @@ public class Menu extends BaseEntity {
      * 是否可见, 1:可见，0：不可见
      */
     @Column(name = "visiable", columnDefinition = "int default 1")
-    private Integer visiable;
+    private Integer visible;
 
     @Override
     public void prePersist() {

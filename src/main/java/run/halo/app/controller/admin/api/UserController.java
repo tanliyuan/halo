@@ -4,12 +4,10 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import io.swagger.annotations.ApiOperation;
-import javax.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
 import run.halo.app.annotation.DisableOnCondition;
 import run.halo.app.cache.lock.CacheLock;
 import run.halo.app.exception.BadRequestException;
@@ -25,6 +23,8 @@ import run.halo.app.model.vo.MultiFactorAuthVO;
 import run.halo.app.service.UserService;
 import run.halo.app.utils.TwoFactorAuthUtils;
 import run.halo.app.utils.ValidationUtils;
+
+import javax.validation.Valid;
 
 /**
  * User controller.
@@ -60,6 +60,15 @@ public class UserController {
 
         // Update user and convert to dto
         return new UserDTO().convertFrom(userService.update(user));
+    }
+
+    @GetMapping("list")
+    public Page<UserDTO> page(Integer pageNum, Integer pageSize) {
+        Page<User> userList = userService.listAll(PageRequest.of(pageNum, pageSize, Sort.by("createTime").descending()));
+        return userList.map(t -> {
+            UserDTO userDto = new UserDTO();
+            return userDto.convertFrom(t);
+        });
     }
 
     @PutMapping("profiles/password")
